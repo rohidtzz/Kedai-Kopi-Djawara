@@ -49,13 +49,14 @@ class Auth extends CI_Controller {
             $this->session->set_userdata('user_id', $user->id);
 			$this->session->set_userdata('name', $user->name);
 			$this->session->set_userdata('email', $user->email);
+			$this->session->set_userdata('phone', $user->phone);
 			$this->session->set_userdata('roles', $user->roles);
 
 			if($user->roles == 'admin'){
 				redirect('admin');
 				
 			}else{
-				redirect('user');
+				redirect('/');
 			}
         } else {
             // Jika login gagal

@@ -80,11 +80,11 @@
                     <div class="card" >
                         <div style="background-color:#b6895b;" class="card-header text-white">Data Pelanggan</div>
                         <div class="card-body">
-                            <input name="name"  type="text" class="form-control" required placeholder="Masukan nama anda">
+                            <input value="<?php echo $this->session->userdata('name') ?>" name="name"  type="text" class="form-control" required placeholder="Masukan nama anda">
                             <br>
-                            <input name="email"  type="email"  class="form-control" required placeholder="Masukan Email anda">
+                            <input value="<?php echo $this->session->userdata('email') ?>" name="email"  type="email"  class="form-control" required placeholder="Masukan Email anda">
                             <br>
-                            <input name="phone"  type="number" class="form-control" required placeholder="Masukkan No hp Anda">
+                            <input value="<?php echo $this->session->userdata('phone') ?>" name="phone"  type="number" class="form-control" required placeholder="Masukkan No hp Anda">
                         </div>
                     </div>
                 </div>

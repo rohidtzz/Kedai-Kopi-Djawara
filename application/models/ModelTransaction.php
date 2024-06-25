@@ -35,6 +35,23 @@ class ModelTransaction extends CI_Model {
         return $transactions;
     }
 
+	public function get_transactions_by_user_id($user_id) {
+		$this->db->order_by('id', 'DESC');
+		$this->db->where('user_id', $user_id);
+        $query = $this->db->get('transaction');
+        $transactions = $query->result_array();
+
+        // Load product model
+        $this->load->model('ModelProduct');
+
+        // Add product data to each transaction
+        foreach ($transactions as &$transaction) {
+            $transaction['product'] = $this->ModelProduct->getProductById($transaction['product_id']);
+        }
+
+        return $transactions;
+    }
+
 
 	public function getTransactionByNoOrder($trx)
     {
