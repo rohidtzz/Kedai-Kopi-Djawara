@@ -286,11 +286,77 @@ class Admin extends CI_Controller {
 
 	public function profile()
 	{
+		$data['title']	= 'Profile';
+		$data['profile'] = "active";
+		$data['profiles'] = $this->ModelUser->get_user_by_id($this->session->userdata('user_id'));
+
+
 		$this->load->view('dashboard/template/header');
-		$this->load->view('dashboard/template/sidebar');
-		$this->load->view('dashboard/template/topbar');
-		$this->load->view('dashboard/admin/add_product');
+		$this->load->view('dashboard/template/sidebar',$data);
+		$this->load->view('dashboard/template/topbar',$data);
+		$this->load->view('dashboard/admin/profile',$data);
 		$this->load->view('dashboard/template/footer');
+
+	}
+
+	public function update_profile($id)
+	{
+		$this->load->library('form_validation');
+		
+
+        // Set validation rules
+        $this->form_validation->set_rules('name', 'Name', 'required');
+		$this->form_validation->set_rules('username', 'Username', 'required');
+		$this->form_validation->set_rules('phone', 'Phone', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		
+
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails, reload the form with errors
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('admin/profile');
+        } else {
+            // Collecting user data
+            $userData = array(
+                'name' => $this->input->post('name'),
+				'username' => $this->input->post('username'),
+                'email' => $this->input->post('email'),
+				'phone' => $this->input->post('phone'),
+            );
+
+            // If password is set, include it in the update
+            if($this->input->post('password')) {
+                $userData['password'] = md5($this->input->post('password'));
+            }
+
+            // Handling file upload
+            if (!empty($_FILES['img']['name'])) {
+                $config['upload_path'] = 'assets/welcome/img/user/';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['file_name'] = $_FILES['img']['name'];
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('img')) {
+                    $uploadData = $this->upload->data();
+                    $userData['img'] = 'welcome/img/user/'.$uploadData['file_name'];
+                } else {
+                    $this->session->set_flashdata('error', $this->upload->display_errors());
+                    redirect('admin/profile');
+                }
+            }
+
+            // Update user data
+            if ($this->ModelUser->update_user($id, $userData)) {
+				$this->session->set_flashdata('success', 'Profile berhasil diupdate');
+				redirect('admin/profile');
+            } else {
+				$this->session->set_flashdata('success', 'Profile gagal diupdate');
+				redirect('admin/profile');
+            }
+            redirect('admin/profile');
+        }
+		
 
 	}
 }

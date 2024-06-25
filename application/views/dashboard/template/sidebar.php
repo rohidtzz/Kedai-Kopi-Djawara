@@ -48,7 +48,7 @@
         </li>
 
 				<li class="nav-item">
-          <a href="<?php echo base_url('admin/profile') ?>" class="nav-link " href="./pages/profile.html">
+          <a href="<?php echo base_url('admin/profile') ?>" class="nav-link <?php echo (isset($profile)) ? $profile : '' ?>" href="./pages/profile.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
