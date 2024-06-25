@@ -27,6 +27,10 @@ class ModelUser extends CI_Model
         return $this->db->update('user', $data);
     }
 
+	public function getTotalUsers() {
+		return $this->db->count_all('user'); // Assuming 'users' is your users table
+	}
+
 
     
    

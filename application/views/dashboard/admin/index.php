@@ -8,7 +8,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Sells</p>
                     <h5 class="font-weight-bolder">
-                      $53,000
+                      Rp. <?php echo number_format($today_sales,0,',','.') ?>
                     </h5>
                     
                   </div>
@@ -30,7 +30,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Users</p>
                     <h5 class="font-weight-bolder">
-                      2,300
+											<?php echo number_format($total_users,0,',','.') ?>
                     </h5>
                     
                   </div>
@@ -52,7 +52,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Product</p>
                     <h5 class="font-weight-bolder">
-                      +3,462
+											<?php echo number_format($total_products,0,',','.') ?>
                     </h5>
                     
                   </div>
@@ -74,7 +74,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Sales</p>
                     <h5 class="font-weight-bolder">
-                      $103,430
+											Rp. <?php echo number_format($total_transactions,0,',','.') ?>
                     </h5>
                     
                   </div>

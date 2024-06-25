@@ -37,6 +37,10 @@ class ModelProduct extends CI_Model
         $this->db->where('id', $product_id);
         $this->db->update('product', array('stock' => $new_stock));
     }
+
+	public function getTotalProducts() {
+		return $this->db->count_all('product'); // Assuming 'products' is your products table
+	}
     
    
 }

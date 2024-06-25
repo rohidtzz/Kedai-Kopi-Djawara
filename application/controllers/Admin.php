@@ -32,6 +32,11 @@ class Admin extends CI_Controller {
 		$data['title']	= 'Dashboard';
 		$data['dashboard'] = "active";
 
+		$data['today_sales'] = $this->ModelTransaction->getTodaySales();
+		$data['total_users'] = $this->ModelUser->getTotalUsers();
+		$data['total_products'] = $this->ModelProduct->getTotalProducts();
+		$data['total_transactions'] = $this->ModelTransaction->getTotalSales();
+
 
 		$this->load->view('dashboard/template/header');
 		$this->load->view('dashboard/template/sidebar', $data);

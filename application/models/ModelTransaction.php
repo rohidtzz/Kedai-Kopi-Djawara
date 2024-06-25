@@ -49,5 +49,22 @@ class ModelTransaction extends CI_Model {
         $this->db->where('no_order', $trx);
         return $this->db->update('transaction', $data);
     }
+
+	public function getTodaySales() {
+		$today = date('Y-m-d'); // Get today's date
+		$this->db->select_sum('totals'); // Assuming 'amount' is your sales amount field
+		$this->db->where('status', 'paid');
+		$this->db->where('created_at', $today); // Assuming 'date' is your transaction date field
+		$query = $this->db->get('transaction'); // Assuming 'transactions' is your transactions table
+		return $query->row()->totals;
+	}
+
+	public function getTotalSales() {
+		$this->db->select_sum('totals'); // Assuming 'amount' is your sales amount field
+		$this->db->where('status', 'paid');
+		$query = $this->db->get('transaction'); // Assuming 'transactions' is your transactions table
+		return $query->row()->totals;
+	}
+
 }
 ?>
