@@ -14,6 +14,11 @@ class ModelTransaction extends CI_Model {
         return $query->result_array();
     }
 
+	public function updateTransaction_status($transaction_id, $data) {
+        $this->db->where('id', $transaction_id);
+        return $this->db->update('transaction', $data);
+    }
+
 	public function get_all_transaction_and_product() {
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get('transaction');

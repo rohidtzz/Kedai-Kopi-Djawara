@@ -6,8 +6,16 @@ class ModelProduct extends CI_Model
     public function getProduct() { return $this->db->get('product'); }
     public function productWhere($where) { return $this->db->get_where('product', $where); }
     public function simpanProduct($data = null) { $this->db->insert('product',$data); }
-    public function updateProduct($where = null, $data = null) { $this->db->update('product', $data, $where); }
-    public function hapusProduct($where = null) { $this->db->delete('product', $where); }
+
+	public function deleteProduct($product_id) {
+        $this->db->where('id', $product_id);
+        return $this->db->delete('product');
+    }
+
+	public function updateProduct($product_id, $data) {
+        $this->db->where('id', $product_id);
+        return $this->db->update('product', $data);
+    }
 
 	public function get_all_products() {
         $this->db->order_by('id', 'DESC');

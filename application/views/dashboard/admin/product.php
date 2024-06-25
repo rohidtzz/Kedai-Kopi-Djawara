@@ -8,13 +8,44 @@
 						<h6><?php echo $title ?> table</h6>	
 						</div>
 						<div class="col text-end">
-							<button class="btn btn-primary">
-								Tambah data
-							</button>
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+							Tambah Data
+						</button>
 						</div>
 					</div>
+					<?php
+
+						$gets = isset($_GET['status']);
+						if($gets){
+							
+							if($_GET['status'] == 'success'){
+			
+								echo "<div class='alert alert-primary text-white alert-dismissible fade show' role='alert'>";
+									if(isset($_GET['message'])){
+
+										echo str_replace('_',' ',$_GET['message']);
+									} else {
+			
+									}
+									echo "<button type='button' class='btn-close text-white'  data-bs-dismiss='alert' aria-label='Close'>x</button>";
+								echo "</div>";
+							} else if($_GET['status'] == 'failed'){
+								echo "<div class='alert text-white alert-danger alert-dismissible fade show' role='alert'>";
+									if(isset($_GET['message'])){
+										echo str_replace('_',' ',$_GET['message']);
+									} else {
+			
+									}
+									echo "<button type='button' class='btn-close text-white' data-bs-dismiss='alert' aria-label='Close'>x</button>";
+								echo "</div>";
+							}
+						} else {
+
+						}
+					?>
                     <!-- <h6>Product table</h6> -->
                 </div>
+				
 				
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-3">
@@ -38,7 +69,7 @@
 								<?php foreach($products as $product): ?>
 									<tr>
 										<td>
-											<img src="<?php echo base_url('assets/'.$product['img']) ?>" style="border-radius:20px" class=""
+											<img src="<?php echo base_url('assets/'.$product['img']) ?>" style="border-radius:20px" width="250" class=""
 												alt="user1">
 											
 										</td>
@@ -52,16 +83,58 @@
 											<span class="text-secondary text-xs font-weight-bold"><?php echo $product['stock'] ?></span>
 										</td>
 										<td class="align-middle text-center">
-											<button href="javascript:;" class="text-white font-weight-bold text-xs btn btn-primary"
-												data-toggle="tooltip" data-original-title="Edit user">
+											<button type="button" class="btn btn-primary text-white font-weight-bold text-xs " data-bs-toggle="modal" data-bs-target="#exampleModal-<?php echo $product['id'] ?>">
 												Edit
 											</button>
-											<a href="javascript:;" class="text-white font-weight-bold text-xs btn btn-danger"
+											<a href="<?php echo base_url('admin/delete_product/' . $product['id']); ?>" onclick="return confirm('Are you sure you want to delete this product?');" class="text-white font-weight-bold text-xs btn btn-danger"
 												data-toggle="tooltip" data-original-title="Edit user">
 												Delete
 											</a>
 										</td>
 									</tr>
+
+									<div class="modal fade" id="exampleModal-<?php echo $product['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+											
+												<form action="<?php echo base_url('admin/update_product/'.$product['id']) ?>" method="post" enctype="multipart/form-data">
+													
+													<div class="mb-3 form-group">
+														<label for="img">Image:</label>
+														<input class="form-control" type="file" name="img" id="img" >
+													</div>
+
+													<div class="mb-3 form-group">
+														<label for="name">Name:</label>
+														<input class="form-control" value="<?php echo $product['name'] ?>" type="text" name="name" id="name" required>
+													</div>
+
+													<div class="mb-3 form-group">
+														<label for="price">Price:</label>
+														<input class="form-control" value="<?php echo $product['price'] ?>" type="number" name="price" id="price" required>
+													</div>
+
+													<div class="mb-3 form-group">
+														<label for="stock">Stock:</label>
+														<input class="form-control" value="<?php echo $product['stock'] ?>" type="number" name="stock" id="stock" required>
+													</div>
+
+																						
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary">Save changes</button>
+											</div>
+											</form>	
+											</div>
+										</div>
+									</div>
+
 
 								<?php endforeach; ?>
                                 
@@ -78,3 +151,44 @@ $(document).ready(function() {
     $('#example').DataTable();
 });
 </script>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+	
+	  	<form action="<?php echo base_url('admin/add_product') ?>" method="post" enctype="multipart/form-data">
+			<div class="mb-3 form-group">
+				<label for="img">Image:</label>
+				<input class="form-control" type="file" name="img" id="img" required>
+			</div>
+
+			<div class="mb-3 form-group">
+				<label for="name">Name:</label>
+				<input class="form-control" type="text" name="name" id="name" required>
+			</div>
+
+			<div class="mb-3 form-group">
+				<label for="price">Price:</label>
+				<input class="form-control" type="number" name="price" id="price" required>
+			</div>
+
+			<div class="mb-3 form-group">
+				<label for="stock">Stock:</label>
+				<input class="form-control" type="number" name="stock" id="stock" required>
+			</div>
+
+												
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+	  </form>	
+    </div>
+  </div>
+</div>
+
