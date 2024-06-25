@@ -93,13 +93,9 @@ class Admin extends CI_Controller {
 			// Simpan transaksi ke dalam database
 			$transaction_id = $this->ModelProduct->simpanProduct($product_data);
 	   
-			if ($transaction_id) {
-				$this->session->set_flashdata('success', 'Product berhasil ditambahkan');
-			   redirect('/admin/product');
-			} else {
-				$this->session->set_flashdata('error', 'Product gagal ditambahkan');
-			   redirect('/admin/product');
-			}
+			$this->session->set_flashdata('success', 'Product berhasil ditambahkan');
+		   	redirect('/admin/product');
+			
 		}
 
 
