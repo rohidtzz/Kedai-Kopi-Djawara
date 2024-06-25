@@ -13,36 +13,18 @@
 						</button>
 						</div>
 					</div>
-					<?php
-
-						$gets = isset($_GET['status']);
-						if($gets){
-							
-							if($_GET['status'] == 'success'){
-			
-								echo "<div class='alert alert-primary text-white alert-dismissible fade show' role='alert'>";
-									if(isset($_GET['message'])){
-
-										echo str_replace('_',' ',$_GET['message']);
-									} else {
-			
-									}
-									echo "<button type='button' class='btn-close text-white'  data-bs-dismiss='alert' aria-label='Close'>x</button>";
-								echo "</div>";
-							} else if($_GET['status'] == 'failed'){
-								echo "<div class='alert text-white alert-danger alert-dismissible fade show' role='alert'>";
-									if(isset($_GET['message'])){
-										echo str_replace('_',' ',$_GET['message']);
-									} else {
-			
-									}
-									echo "<button type='button' class='btn-close text-white' data-bs-dismiss='alert' aria-label='Close'>x</button>";
-								echo "</div>";
-							}
-						} else {
-
-						}
-					?>
+					<?php if($this->session->flashdata('error')): ?>
+                    <div class="alert text-white alert-danger alert-dismissible fade show" role="alert">
+                      <?php echo $this->session->flashdata('error'); ?>
+							<a href="<?php echo base_url('/auth') ?>" type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'>x</a>
+                    </div>
+                	<?php endif; ?>
+					<?php if($this->session->flashdata('success')): ?>
+						<div class="alert text-white alert-success alert-dismissible fade show" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+							<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'>x</button>
+						</div>
+					<?php endif; ?>
                     <!-- <h6>Product table</h6> -->
                 </div>
 				

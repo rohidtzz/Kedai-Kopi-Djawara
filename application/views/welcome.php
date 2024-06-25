@@ -36,7 +36,21 @@
         <!-- <a href="#" id="search"><i data-feather="search"></i></a> -->
         <!-- <a href="#" id="shopping-cart"><i data-feather="shopping-cart"></i></a> -->
         <!-- <a href="/order" >Pesan</a> -->
-        <a href="<?php echo base_url('auth/') ?>" >Login</a>
+				 <?php if($isLogin) { ?>
+							<a href="<?php 
+							if($isLogin == "admin"){
+
+								echo base_url('admin/');
+							} else {
+								echo base_url('user/');
+							}
+							
+							?>" >Dashboard</a>
+					<?php } else { ?>
+						
+						<a href="<?php echo base_url('auth/') ?>" >Login</a>
+
+					<?php } ?>
         <!-- <a href="history/" >Cek pesanan</a> -->
       </div>
     </nav>

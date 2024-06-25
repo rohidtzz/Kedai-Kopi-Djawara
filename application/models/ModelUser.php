@@ -9,6 +9,24 @@ class ModelUser extends CI_Model
         return $query->row(); // kembalikan data pengguna jika ada
     }
 
+	public function get_user_by_id($id) {
+		$this->db->where('id', $id);
+		$query = $this->db->get('user');
+		return $query->row_array();
+	}
+
+	public function get_all_user() {
+		$this->db->order_by('id', 'DESC');
+		$this->db->where('roles', 'user');
+		$query = $this->db->get('user');
+		return $query->result_array();
+	}
+
+	public function update_user($id, $data) {
+        $this->db->where('id', $id);
+        return $this->db->update('user', $data);
+    }
+
 
     
    

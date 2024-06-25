@@ -23,6 +23,7 @@ class Admin extends CI_Controller {
 		//ambil model
 		$this->load->model('ModelProduct');
 		$this->load->model('ModelTransaction');
+		$this->load->model('ModelUser');
 		$this->load->helper('login');
 		cek_admin();
 	}
@@ -70,7 +71,7 @@ class Admin extends CI_Controller {
 
 		if (!$this->upload->do_upload('img')) {
 			$error = array('error' => $this->upload->display_errors());
-			redirect('/admin/product?status=failed');
+			redirect('/admin/product');
 		} else{
 			$image_data = $this->upload->data();
    			$image_path = 'welcome/img/menu/' . $image_data['file_name'];
@@ -88,9 +89,11 @@ class Admin extends CI_Controller {
 			$transaction_id = $this->ModelProduct->simpanProduct($product_data);
 	   
 			if ($transaction_id) {
-			   redirect('/admin/product/?status=success&message=product_berhasil_ditambahkan');
+				$this->session->set_flashdata('success', 'Product berhasil ditambahkan');
+			   redirect('/admin/product');
 			} else {
-			   redirect('/admin/product?status=failed$&message=product_gagal_ditambahkan');
+				$this->session->set_flashdata('error', 'Product gagal ditambahkan');
+			   redirect('/admin/product');
 			}
 		}
 
@@ -125,7 +128,7 @@ class Admin extends CI_Controller {
 	
 			if (!$this->upload->do_upload('img')) {
 				$error = array('error' => $this->upload->display_errors());
-				redirect('/admin/product?status=failed');
+				redirect('/admin/product');
 			} else {
 				$image_data = $this->upload->data();
 				$image_path = 'welcome/img/menu/' . $image_data['file_name'];
@@ -137,9 +140,11 @@ class Admin extends CI_Controller {
 		$update_status = $this->ModelProduct->updateProduct($product_id, $product_data);
 	
 		if ($update_status) {
-			redirect('/admin/product/?status=success&message=product_berhasil_diupdate');
+			$this->session->set_flashdata('success', 'Product berhasil diupdate');
+			redirect('/admin/product');
 		} else {
-			redirect('/admin/product?status=failed&message=product_gagal_diupdate');
+			$this->session->set_flashdata('error', 'Product gagal diupdate');
+			redirect('/admin/product');
 		}
 
 
@@ -153,9 +158,11 @@ class Admin extends CI_Controller {
 		$delete_status = $this->ModelProduct->deleteProduct($product_id);
 	
 		if ($delete_status) {
-			redirect('/admin/product/?status=success&message=product_berhasil_dihapus');
+			$this->session->set_flashdata('success', 'product berhasil dihapus');
+			redirect('/admin/product');
 		} else {
-			redirect('/admin/product?status=failed&message=product_gagal_dihapus');
+			$this->session->set_flashdata('error', 'product gagal dihapus');
+			redirect('/admin/product');
 		}
 	}
 
@@ -189,21 +196,86 @@ class Admin extends CI_Controller {
 		$update_status = $this->ModelTransaction->updateTransaction_status($transaction_id, $transaction_data);
 	
 		if ($update_status) {
-			redirect('/admin/transaction/?status=success&message=transaction_berhasil_diupdate');
+			$this->session->set_flashdata('success', 'Transaction berhasil diupdate');
+			redirect('/admin/transaction');
 		} else {
-			redirect('/admin/transaction?status=failed&message=transaction_gagal_diupdate');
+			$this->session->set_flashdata('error', 'Transaction gagal diupdate');
+			redirect('/admin/transaction');
 		}
 
 
     }
 
-	public function user()
+	public function users()
 	{
+		$data['title']	= 'User';
+		$data['users'] = $this->ModelUser->get_all_user();
+		$data['user'] = "active";
+
 		$this->load->view('dashboard/template/header');
-		$this->load->view('dashboard/template/sidebar');
-		$this->load->view('dashboard/template/topbar');
-		$this->load->view('dashboard/admin/user');
+		$this->load->view('dashboard/template/sidebar',$data);
+		$this->load->view('dashboard/template/topbar',$data);
+		$this->load->view('dashboard/admin/user',$data);
 		$this->load->view('dashboard/template/footer');
+
+	}
+
+	public function update_users($id)
+	{
+		$this->load->library('form_validation');
+
+        // Set validation rules
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('username', 'Username', 'required');
+		$this->form_validation->set_rules('phone', 'Phone', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails, reload the form with errors
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('admin/users');
+        } else {
+            // Collecting user data
+            $userData = array(
+                'name' => $this->input->post('name'),
+                'username' => $this->input->post('username'),
+                'email' => $this->input->post('email'),
+				'phone' => $this->input->post('phone'),
+            );
+
+            // If password is set, include it in the update
+            if($this->input->post('password')) {
+                $userData['password'] = md5($this->input->post('password'));
+            }
+
+            // Handling file upload
+            if (!empty($_FILES['img']['name'])) {
+                $config['upload_path'] = 'assets/welcome/img/user/';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['file_name'] = $_FILES['img']['name'];
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('img')) {
+                    $uploadData = $this->upload->data();
+                    $userData['img'] = 'welcome/img/user/'.$uploadData['file_name'];
+                } else {
+                    $this->session->set_flashdata('error', $this->upload->display_errors());
+                    redirect('admin/users');
+                }
+            }
+
+            // Update user data
+            if ($this->ModelUser->update_user($id, $userData)) {
+				$this->session->set_flashdata('success', 'User berhasil diupdate');
+				redirect('admin/users');
+            } else {
+				$this->session->set_flashdata('success', 'User gagal diupdate');
+				redirect('admin/users');
+            }
+            redirect('admin/users');
+        }
+		
 
 	}
 

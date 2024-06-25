@@ -23,6 +23,7 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->model('ModelProduct');
 		$data['product'] = $this->ModelProduct->getProduct()->result_array();
+		$data['isLogin'] = $this->session->userdata('roles');
         
         $this->load->view('welcome', $data);
 	}

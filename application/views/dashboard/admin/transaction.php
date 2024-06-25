@@ -8,6 +8,18 @@
 						<h6><?php echo $title ?> Table</h6>	
 						</div>
 					</div>
+					<?php if($this->session->flashdata('error')): ?>
+                    <div class="alert text-white alert-danger alert-dismissible fade show" role="alert">
+                      <?php echo $this->session->flashdata('error'); ?>
+							<a href="<?php echo base_url('/auth') ?>" type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'>x</a>
+                    </div>
+                	<?php endif; ?>
+					<?php if($this->session->flashdata('success')): ?>
+						<div class="alert text-white alert-success alert-dismissible fade show" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+							<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'>x</button>
+						</div>
+					<?php endif; ?>
                     <!-- <h6>Product table</h6> -->
                 </div>
 				
@@ -28,16 +40,16 @@
                                         Nominal</th>
 									<th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        status</th>
+                                        Status</th>
 									<th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        name</th>
+                                        Name</th>
 									<th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        email</th>
+                                        Email</th>
 									<th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        phone</th>
+                                        Phone</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
                             </thead>
