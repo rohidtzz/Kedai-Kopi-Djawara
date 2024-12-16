@@ -78,6 +78,52 @@ class Payment extends CI_Controller {
             );
             $this->ModelTransaction->updateTransaction($trx, $data);
 
+			$phone = $transaction['phone'];
+			
+			$phone = trim($phone);
+			$phone = strip_tags($phone);
+			$phone= str_replace(" ","",$phone);
+			$phone= str_replace("(","",$phone);
+			$phone= str_replace(".","",$phone);
+	
+			if(!preg_match('/[^+0-9]/',trim($phone))){
+	
+				if(substr(trim($phone), 0, 3)=='+62'){
+					$phone= trim($phone);
+				}
+				elseif(substr($phone, 0, 1)=='0'){
+					$phone= '62'.substr($phone, 1);
+				}
+			}
+
+			$data = array(
+				"api_key" => "ae8598f8f95f150d3e25e1111f52f1e25dcb9420",
+				"receiver" => $phone,
+				"data" => array("message" => "Pembayaran untuk transaksi {$trx} berhasil. Terima kasih."),
+			);
+
+			$jsonData = json_encode($data);
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://server2.goowa.id/api/send-message',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => $jsonData,
+				CURLOPT_HTTPHEADER => array(
+					'Content-Type: application/json'
+				),
+			));
+
+			$response = curl_exec($curl);
+			curl_close($curl);
+
             // Redirect ke halaman index.php dengan trx sebagai parameter
             redirect(base_url("payment?trx={$trx}&status=success"));
         }

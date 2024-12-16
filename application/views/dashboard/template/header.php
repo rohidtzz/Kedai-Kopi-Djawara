@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="<?php echo base_url('assets/logo-kedai.png') ?>">
   <link rel="icon" type="image/png" href="<?php echo base_url('assets/logo-kedai.png') ?>">
   <title>
-    Argon Dashboard 2 by Creative Tim
+    Kedai Kopi Djawara
   </title>
 	<!-- DataTables CSS -->
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
